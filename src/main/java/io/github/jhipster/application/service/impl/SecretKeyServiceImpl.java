@@ -1,6 +1,7 @@
 package io.github.jhipster.application.service.impl;
 
 import io.github.jhipster.application.service.SecretKeyService;
+
 import io.github.jhipster.application.domain.SecretKey;
 import io.github.jhipster.application.repository.SecretKeyRepository;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ public class SecretKeyServiceImpl implements SecretKeyService {
     private final Logger log = LoggerFactory.getLogger(SecretKeyServiceImpl.class);
 
     private final SecretKeyRepository secretKeyRepository;
+    
 
     public SecretKeyServiceImpl(SecretKeyRepository secretKeyRepository) {
         this.secretKeyRepository = secretKeyRepository;
@@ -36,6 +38,9 @@ public class SecretKeyServiceImpl implements SecretKeyService {
     @Override
     public SecretKey save(SecretKey secretKey) {
         log.debug("Request to save SecretKey : {}", secretKey);
+       int abc= UniqueKeyGenerator.getuniquekey();
+       System.out.println(abc);
+      secretKey.setUniqueId(abc);
         return secretKeyRepository.save(secretKey);
     }
 
