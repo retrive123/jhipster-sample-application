@@ -2,7 +2,11 @@ package io.github.jhipster.application.service.impl;
 
 import io.github.jhipster.application.service.ProductService;
 import io.github.jhipster.application.domain.Product;
+import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.ProductRepository;
+import io.github.jhipster.application.repository.UserRepository;
+import io.github.jhipster.application.security.SecurityUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +26,11 @@ public class ProductServiceImpl implements ProductService {
     private final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository,UserRepository userRepository) {
         this.productRepository = productRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -36,7 +42,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product save(Product product) {
         log.debug("Request to save Product : {}", product);
+        String str = SecurityUtils.getCurrentUserLogin().toString();
+        str = str.substring(str.indexOf("[") + 1);
+	    str = str.substring(0, str.indexOf("]"));
+
+	    System.out.println(str);
+	    
+	    Optional<User> user= userRepository.findOneByLogin(str);
+	    
+        product.setManuId(Math.toIntExact (user.get().getId()));
+        product.setManuName(user.get().getFirstName());
         return productRepository.save(product);
+        
+        
     }
 
     /**
