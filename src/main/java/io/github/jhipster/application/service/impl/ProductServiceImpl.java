@@ -2,8 +2,10 @@ package io.github.jhipster.application.service.impl;
 
 import io.github.jhipster.application.service.ProductService;
 import io.github.jhipster.application.domain.Product;
+import io.github.jhipster.application.domain.SecretKey;
 import io.github.jhipster.application.domain.User;
 import io.github.jhipster.application.repository.ProductRepository;
+import io.github.jhipster.application.repository.SecretKeyRepository;
 import io.github.jhipster.application.repository.UserRepository;
 import io.github.jhipster.application.security.SecurityUtils;
 
@@ -27,10 +29,12 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final SecretKeyRepository secretKeyRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository,UserRepository userRepository) {
+    public ProductServiceImpl(ProductRepository productRepository,UserRepository userRepository,SecretKeyRepository secretKeyRepository) {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.secretKeyRepository=secretKeyRepository;
     }
 
     /**
@@ -49,9 +53,17 @@ public class ProductServiceImpl implements ProductService {
 	    System.out.println(str);
 	    
 	    Optional<User> user= userRepository.findOneByLogin(str);
-	    
-        product.setManuId(Math.toIntExact (user.get().getId()));
+	    int userid= Math.toIntExact (user.get().getId());
+        product.setManuId(userid);
         product.setManuName(user.get().getFirstName());
+       SecretKey asdf =product.getSecretKey();
+       System.out.println(asdf.toString());
+       asdf.assignmentStatus(true);
+       asdf.setManuId(userid);
+        
+       secretKeyRepository.save(asdf);
+        
+        
         return productRepository.save(product);
         
         

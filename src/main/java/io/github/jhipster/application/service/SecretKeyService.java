@@ -40,4 +40,8 @@ public interface SecretKeyService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+	
+
+	Optional<SecretKey> findByUniqueKey(int uniqueId);
 }

@@ -69,6 +69,18 @@ public class SecretKeyServiceImpl implements SecretKeyService {
         log.debug("Request to get SecretKey : {}", id);
         return secretKeyRepository.findById(id);
     }
+    /**s
+     * Get one secretKey by uniquekey.
+     *
+     * @param uniqueId the uniqueId of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<SecretKey> findByUniqueKey(int uniqueId) {
+        log.debug("Request to get SecretKey : {}", uniqueId);
+        return secretKeyRepository.findOneByUniqueId(uniqueId);
+    }
 
     /**
      * Delete the secretKey by id.

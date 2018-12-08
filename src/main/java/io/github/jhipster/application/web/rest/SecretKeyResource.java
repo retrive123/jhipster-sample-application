@@ -49,10 +49,7 @@ public class SecretKeyResource {
             throw new BadRequestAlertException("A new secretKey cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SecretKey result = secretKeyService.save(secretKey);
-        String str = secretKey.getId().toString()+secretKey.getManuId().toString()+secretKey.getUniqueId().toString()+secretKey.isAssignmentStatus().toString();
-      
-       
-        System.out.println(str);
+        
         return ResponseEntity.created(new URI("/api/secret-keys/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
