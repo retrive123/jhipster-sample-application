@@ -33,8 +33,13 @@
         <div class="col-md-12" *ngIf="responseData">
             <br>
             <br>
-            <span class="alert alert-success" *ngIf="responseData.isValid; else invalid">{{secretKey}} is Authentic.</span>
-            <ng-template #invalid><span class="alert alert-danger">{{secretKey}} is not Authentic.</span></ng-template>
+            <span class="alert alert-danger" *ngIf=" isError;else valid">
+                    {{secretKey}} is not Authentic.
+                </span>
+            <ng-template #valid>
+                    <span class="alert alert-success" *ngIf="responseData.isValid">{{secretKey}} {{responseData.message}}.</span>
+                    <span class="alert alert-warning" *ngIf="!responseData.isValid"> {{secretKey}} {{responseData.message}}.</span>
+            </ng-template>
             <br>
             <br>
         </div>

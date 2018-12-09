@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
     modalRef: NgbModalRef;
     secretKey: any;
     responseData: any;
+    isError = false;
     constructor(private principal: Principal, private homeService: HomeService, private loginModalService: LoginModalService, private eventManager: JhiEventManager) {}
 
     ngOnInit() {
@@ -40,14 +41,19 @@ export class HomeComponent implements OnInit {
         this.modalRef = this.loginModalService.open();
     }
     checkAuthentic() {
+        this.responseData = undefined;
+        this.isError = false;
         this.homeService.checkAuthenticity(this.secretKey).subscribe( response => {
+           // console.log(response);
             if (response.body) {
-                this.responseData = response;
-                this.responseData.isValid = true;
+                this.responseData = response.body;
+                // this.responseData.isValid = true;
             }
         }, error => {
+            // console.log(error);
             this.responseData = error;
-            this.responseData.isValid = false;
+            this.isError = true;
+            // this.responseData.isValid = false;
         });
     }
  }

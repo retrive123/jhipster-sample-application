@@ -36,7 +36,6 @@ public class AuthenticKeyServiceImpl implements AuthenticKeyService {
     @Override
     public AuthenticKey save(AuthenticKey authenticKey) {
         log.debug("Request to save AuthenticKey : {}", authenticKey);
-        authenticKey.setUniqueKey(UniqueKeyGenerator.getuniquekey());
         return authenticKeyRepository.save(authenticKey);
     }
 

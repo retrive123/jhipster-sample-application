@@ -6,10 +6,13 @@ import io.github.jhipster.application.service.AuthenticKeyService;
 import io.github.jhipster.application.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.application.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.github.jhipster.application.service.dto.ResponseDetails;
+// import io.github.jhipster.application.service.UniqueKeyGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,7 +32,7 @@ public class AuthenticKeyResource {
     private static final String ENTITY_NAME = "authenticKey";
 
     private final AuthenticKeyService authenticKeyService;
-
+    
     public AuthenticKeyResource(AuthenticKeyService authenticKeyService) {
         this.authenticKeyService = authenticKeyService;
     }
@@ -45,6 +48,8 @@ public class AuthenticKeyResource {
     @Timed
     public ResponseEntity<AuthenticKey> createAuthenticKey(@RequestBody AuthenticKey authenticKey) throws URISyntaxException {
         log.debug("REST request to save AuthenticKey : {}", authenticKey);
+        authenticKey.setAssignmentStatus(true);
+        authenticKey.setUniqueKey(UniqueKeyGenerator.getuniquekey());
         if (authenticKey.getId() != null) {
             throw new BadRequestAlertException("A new authenticKey cannot already have an ID", ENTITY_NAME, "idexists");
         }
@@ -118,9 +123,26 @@ public class AuthenticKeyResource {
 
     @GetMapping("/authentic-check/{key}")
     @Timed
-    public ResponseEntity<AuthenticKey> getAuthenticKeyDetails(@PathVariable int key) {
+    public ResponseEntity<ResponseDetails> getAuthenticKeyDetails(@PathVariable int key) {
         log.debug("REST request to get AuthenticKey : {}", key);
         Optional<AuthenticKey> authenticKey = authenticKeyService.findByUniqueKey(key);
-        return ResponseUtil.wrapOrNotFound(authenticKey);
+        if (authenticKey.isPresent()) {
+        if(!authenticKey.get().isValidStatus()) {
+            authenticKey.get().setValidStatus(true);
+            authenticKeyService.save(authenticKey.get());
+            return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, authenticKey.get().getId().toString()))
+            .body(new ResponseDetails(true,"Is Authenticated"));
+        }
+        else {
+            return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, authenticKey.get().getId().toString()))
+            .body(new ResponseDetails(false,"Is Already Authenticated"));
+        }
+    } 
+     else {
+        throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+     }
+
     }
 }

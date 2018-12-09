@@ -1,10 +1,10 @@
-package io.github.jhipster.application.service.impl;
+package io.github.jhipster.application.web.rest;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class UniqueKeyGenerator {
+public class UniqueKeyGenerator {
 
 
 static int getuniquekey() {

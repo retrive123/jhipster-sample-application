@@ -38,9 +38,6 @@ public class SecretKeyServiceImpl implements SecretKeyService {
     @Override
     public SecretKey save(SecretKey secretKey) {
         log.debug("Request to save SecretKey : {}", secretKey);
-       int abc= UniqueKeyGenerator.getuniquekey();
-       System.out.println(abc);
-      secretKey.setUniqueId(abc);
         return secretKeyRepository.save(secretKey);
     }
 
