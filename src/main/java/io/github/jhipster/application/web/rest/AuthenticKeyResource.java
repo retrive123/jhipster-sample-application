@@ -115,4 +115,12 @@ public class AuthenticKeyResource {
         authenticKeyService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+    @GetMapping("/authentic-check/{key}")
+    @Timed
+    public ResponseEntity<AuthenticKey> getAuthenticKeyDetails(@PathVariable Long key) {
+        log.debug("REST request to get AuthenticKey : {}", key);
+        Optional<AuthenticKey> authenticKey = authenticKeyService.findOne(key);
+        return ResponseUtil.wrapOrNotFound(authenticKey);
+    }
 }

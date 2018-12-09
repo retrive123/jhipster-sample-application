@@ -36,6 +36,7 @@ public class AuthenticKeyServiceImpl implements AuthenticKeyService {
     @Override
     public AuthenticKey save(AuthenticKey authenticKey) {
         log.debug("Request to save AuthenticKey : {}", authenticKey);
+        authenticKey.setUniqueKey(UniqueKeyGenerator.getuniquekey());
         return authenticKeyRepository.save(authenticKey);
     }
 
@@ -74,5 +75,12 @@ public class AuthenticKeyServiceImpl implements AuthenticKeyService {
     public void delete(Long id) {
         log.debug("Request to delete AuthenticKey : {}", id);
         authenticKeyRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<AuthenticKey> findByUniqueKey(int uniqueKey) {
+        log.debug("Request to get AuthenticKey : {}", uniqueKey);
+        return authenticKeyRepository.findOneByUniqueKey(uniqueKey);
     }
 }

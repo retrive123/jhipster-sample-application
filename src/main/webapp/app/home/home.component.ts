@@ -3,6 +3,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginModalService, Principal, Account } from 'app/core';
+import { HomeService } from 'app/home/home.service';
 
 @Component({
     selector: 'jhi-home',
@@ -12,6 +13,8 @@ import { LoginModalService, Principal, Account } from 'app/core';
 export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
+    secretKey: any;
+    homeService: HomeService = new HomeService();
 
     constructor(private principal: Principal, private loginModalService: LoginModalService, private eventManager: JhiEventManager) {}
 
@@ -37,4 +40,10 @@ export class HomeComponent implements OnInit {
     login() {
         this.modalRef = this.loginModalService.open();
     }
-}
+    checkAuthentic() {
+        this.homeService.checkAuthenticity(this.secretKey).subscribe( response => {
+            console.log('Hey There !! From Check Authentic User');
+            console.log(response);
+        });
+    }
+ }

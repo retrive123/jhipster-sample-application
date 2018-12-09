@@ -5,9 +5,11 @@ import io.github.jhipster.application.domain.ProductDetails;
 import io.github.jhipster.application.repository.ProductDetailsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import io.github.jhipster.application.security.SecurityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import io.github.jhipster.application.domain.User;
+import io.github.jhipster.application.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +24,11 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
     private final Logger log = LoggerFactory.getLogger(ProductDetailsServiceImpl.class);
 
     private final ProductDetailsRepository productDetailsRepository;
+    private final UserRepository userRepository;
 
-    public ProductDetailsServiceImpl(ProductDetailsRepository productDetailsRepository) {
+    public ProductDetailsServiceImpl(ProductDetailsRepository productDetailsRepository,UserRepository userRepository) {
         this.productDetailsRepository = productDetailsRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -36,6 +40,13 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
     @Override
     public ProductDetails save(ProductDetails productDetails) {
         log.debug("Request to save ProductDetails : {}", productDetails);
+        String str = SecurityUtils.getCurrentUserLogin().toString();
+        str = str.substring(str.indexOf("[") + 1);
+        str = str.substring(0, str.indexOf("]"));
+        Optional<User> user= userRepository.findOneByLogin(str);
+        int userid= Math.toIntExact (user.get().getId());
+        productDetails.setManuId(userid);
+        productDetails.setManuName(user.get().getFirstName());
         return productDetailsRepository.save(productDetails);
     }
 
