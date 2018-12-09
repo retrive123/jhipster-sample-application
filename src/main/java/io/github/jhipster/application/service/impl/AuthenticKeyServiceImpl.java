@@ -81,6 +81,6 @@ public class AuthenticKeyServiceImpl implements AuthenticKeyService {
     @Transactional(readOnly = true)
     public Optional<AuthenticKey> findByUniqueKey(int uniqueKey) {
         log.debug("Request to get AuthenticKey : {}", uniqueKey);
-        return authenticKeyRepository.findOneByUniqueKey(uniqueKey);
+        return authenticKeyRepository.findByUniqueKey(uniqueKey);
     }
 }

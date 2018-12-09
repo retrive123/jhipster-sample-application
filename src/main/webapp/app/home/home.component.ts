@@ -14,9 +14,8 @@ export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
     secretKey: any;
-    homeService: HomeService = new HomeService();
-
-    constructor(private principal: Principal, private loginModalService: LoginModalService, private eventManager: JhiEventManager) {}
+    responseData: any;
+    constructor(private principal: Principal, private homeService: HomeService, private loginModalService: LoginModalService, private eventManager: JhiEventManager) {}
 
     ngOnInit() {
         this.principal.identity().then(account => {
@@ -42,8 +41,13 @@ export class HomeComponent implements OnInit {
     }
     checkAuthentic() {
         this.homeService.checkAuthenticity(this.secretKey).subscribe( response => {
-            console.log('Hey There !! From Check Authentic User');
-            console.log(response);
+            if (response.body) {
+                this.responseData = response;
+                this.responseData.isValid = true;
+            }
+        }, error => {
+            this.responseData = error;
+            this.responseData.isValid = false;
         });
     }
  }

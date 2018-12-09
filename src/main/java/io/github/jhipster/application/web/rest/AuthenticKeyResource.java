@@ -118,9 +118,9 @@ public class AuthenticKeyResource {
 
     @GetMapping("/authentic-check/{key}")
     @Timed
-    public ResponseEntity<AuthenticKey> getAuthenticKeyDetails(@PathVariable Long key) {
+    public ResponseEntity<AuthenticKey> getAuthenticKeyDetails(@PathVariable int key) {
         log.debug("REST request to get AuthenticKey : {}", key);
-        Optional<AuthenticKey> authenticKey = authenticKeyService.findOne(key);
+        Optional<AuthenticKey> authenticKey = authenticKeyService.findByUniqueKey(key);
         return ResponseUtil.wrapOrNotFound(authenticKey);
     }
 }

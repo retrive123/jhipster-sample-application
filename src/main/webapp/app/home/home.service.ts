@@ -5,13 +5,11 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class HomeService {
-    
-public checkAuthenticityUrl = SERVER_API_URL + '/authentic-check/';
+public checkAuthenticityUrl = SERVER_API_URL + 'api/authentic-check/';
 
  constructor(private httpClient: HttpClient) {
-
  }
  checkAuthenticity(secretKey: Number): Observable<any> {
-    return this.httpClient.get<Number>(this.checkAuthenticityUrl,{ observe: 'response' });
+    return this.httpClient.get<Number>(this.checkAuthenticityUrl + secretKey, { observe: 'response' });
  }
 }
